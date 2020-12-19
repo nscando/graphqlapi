@@ -1,29 +1,21 @@
 'use stric'
-const { buildSchema, graphql } = require('graphql');
-const express = require('express');
-const { graphqlHTTP } = require('express-graphql');
+const { makeExecutableSchema } = require('graphql-tools')
+const express = require('express')
+const { graphqlHTTP } = require('express-graphql')
+const { readFileSync } = require('fs')
+const { join } = require('path')
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app = express()
+const port = process.env.PORT || 3000
+const resolvers = require('./lib/resolvers')
 
 
-//schema
-const schema = buildSchema(`
-type Query{
-     hello: String
-     
-}
-`)
-
-//resolvers config
-
-const resolvers = {
-  hello: () => {
-    return 'hello world!'
-  },
-
-}
-
+// schema
+const typeDefs = readFileSync(
+  join(__dirname, 'lib', 'schema.graphql'),
+  'utf-8'
+)
+const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 app.use('/api', graphqlHTTP({
   schema: schema,
@@ -32,5 +24,5 @@ app.use('/api', graphqlHTTP({
 }))
 
 app.listen(port, () => {
-  console.log(`Server is listening at http://localhost:${port}/api`);
+  console.log(`Server is listening at http://localhost:${port}/api`)
 })
