@@ -60,7 +60,7 @@ type Mutation {
   "Add people to Course"
   addPeople(courseID: ID!, personID: ID!): Course
   "Delete a course"
-  deleteCourse(_id: ID!): String
-  "Delete a course"
-  deleteStudent(_id: ID!): String
+  deleteCourse(_id: ID!): Boolean
+  "Delete a student"
+  deleteStudent(_id: ID!): Boolean
 }
